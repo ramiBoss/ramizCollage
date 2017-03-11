@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal" >
+      
+      <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+      	 	android:maxWidth="200dip"
+       		android:maxHeight="300dip"/>
+      
+<ScrollView 
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/imageView" 
+      android:orientation="horizontal" >
+   
+  <TableLayout    
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+  
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title"/>
+        
+            <requestFocus />
+       
+    </TableRow>
+    
+    <TableRow
+        android:id="@+id/tableRow11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+<EditText
+            android:id="@+id/cameranote_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_weight="2"
+            android:ems="10"
+            
+            android:inputType="text" >
+     </EditText>
+     
+ </TableRow>
+ 
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/note"/>
+
+      
+    </TableRow>
+    
+     <TableRow
+        android:id="@+id/tableRow12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+           <EditText
+            android:id="@+id/cameranote_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_weight="2"
+            android:ems="10"
+            android:lines="2"
+            android:inputType="textMultiLine" />
+         
+    
+     </TableRow>
+
+     <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rfrom" />
+
+    </TableRow>
+     
+     
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+    <Button 
+    android:id="@+id/crl_fromdate"
+     android:layout_width="wrap_content"    
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    style="?android:attr/borderlessButtonStyle"
+    android:background="#CC0000"
+    android:onClick="fdatePicker" />    
+    
+    <Button 
+         android:id="@+id/crl_fromtime"
+          android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="3"
+    android:background="#CC0000"
+    style="?android:attr/borderlessButtonStyle"
+     android:onClick="ftimePicker" />    
+    
+  </TableRow>
+  
+      <TableRow
+        android:id="@+id/tableRow7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rto" />
+
+    </TableRow>
+    
+    
+     <TableRow
+        android:id="@+id/tableRow34"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        
+        
+    <Button 
+         android:id="@+id/crl_todate"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_weight="2"
+    android:background="#CC0000"
+    style="?android:attr/borderlessButtonStyle"
+   android:onClick="tdatePicker"/>    
+    
+    <Button 
+        android:id="@+id/crl_totime"
+         android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#CC0000"
+    android:layout_weight="3"
+    style="?android:attr/borderlessButtonStyle"
+     android:onClick="ttimePicker"/>    
+    
+  </TableRow>
+
+     <TableRow
+        android:id="@+id/tableRow23"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location"/>
+
+      
+    </TableRow>
+    
+     <TableRow
+        android:id="@+id/tableRow22"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+           <EditText
+            android:id="@+id/cameranote_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_weight="2"
+            android:ems="10"
+            android:lines="2"
+            android:inputType="textMultiLine" />
+         
+    
+     </TableRow>
+    
+     
+      <TableRow
+        android:id="@+id/tableRow42"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"/>
+
+      
+    </TableRow>
+    
+     <TableRow
+        android:id="@+id/tableRow32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    
+           <EditText
+            android:id="@+id/cameranote_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:lines="2"
+            android:inputType="textMultiLine" />
+         
+    
+     </TableRow>
+     
+    
+    
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#CC0000"
+            android:onClick="editReminder"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/edit" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="0dip"
+            android:background="#CC0000"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="removeReminder"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/delete" />
+
+    </TableRow>       
+</TableLayout>
+</ScrollView>
+</RelativeLayout>

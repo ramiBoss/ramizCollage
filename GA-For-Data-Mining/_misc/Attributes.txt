@@ -1,0 +1,53 @@
+// Race of the patient.
+1:race
+
+// gender of the patient
+2:gender
+
+// age of the patient
+3:age
+
+// admission type
+4:admission_type_id
+
+// discharge deposition
+5:discharge_disposition_id
+
+// admission source
+6:admission_source_id
+
+// time in hospital by the patient
+7:time_in_hospital
+
+// number of lab procedures
+8:num_lab_procedures
+
+// total number of procedures
+9:num_procedures
+
+// total number of medications
+10:num_medications
+
+// diagnosis test_1 
+11:diag_1
+
+// diagnosis test_2
+12:diag_2
+
+// diagnosis test_3
+13:diag_3
+
+// total number of diagonsis
+14:number_diagnoses
+
+// level of insulin
+15:insulin
+
+// change in patient's health during time spent in hospital
+16:change
+
+// diabetes Med
+17:diabetesMed
+
+// time of readmission
+18:readmitted

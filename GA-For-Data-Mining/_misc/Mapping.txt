@@ -1,0 +1,43 @@
+//Mapping of the database contents to integer values.
+
+Race:
+	1: 	Caucasian
+	2:	AfricanAmerican
+	3:	?
+	0:	Others
+
+
+Gender:
+	1:	Male
+	2:	Female
+
+Age:
+	1:0-10
+	2:10-20
+	3:20-30
+	4:30-40
+	5:40-50
+	6:50-60
+	7:60-70
+	8:70-80
+	9:80-90
+	10:90-100
+
+Insulin:
+	1:No
+	2:Up
+	3:Down
+	4:Steady
+
+Change:
+	1:No
+	2:Ch
+
+Diabetes:
+	1:No
+	2:Yes
+
+Readmitted:
+	1:No
+	2:<30
+	3:>30

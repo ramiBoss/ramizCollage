@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="file://$USER_HOME$/Downloads/poi-ooxml-3.12.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/commons-codec-1.9.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/poi-ooxml-schemas-3.9.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/poi-ooxml-schemas-3.12-beta1.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/stax-api-1.0.1.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/xmlbeans-2.6.0.jar" />
+    <libelement value="file://$USER_HOME$/Downloads/zpoi-3.8.1-sources.jar" />
+    <libelement value="jar://$USER_HOME$/Downloads/Compressed/poi-3.9.jar/poi-3.9.jar!/" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
+    </src_description>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/bin" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="jdk" jdkName="JavaSE-1.7" jdkType="JavaSDK" />
+    <orderEntry type="module-library">
+      <library name="poi-ooxml-3.12.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/poi-ooxml-3.12.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="commons-codec-1.9.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/commons-codec-1.9.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="poi-ooxml-schemas-3.9.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/poi-ooxml-schemas-3.9.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="poi-ooxml-schemas-3.12-beta1.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/poi-ooxml-schemas-3.12-beta1.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="stax-api-1.0.1.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/stax-api-1.0.1.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="xmlbeans-2.6.0.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/xmlbeans-2.6.0.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="zpoi-3.8.1-sources.jar">
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/zpoi-3.8.1-sources.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="poi-3.9.jar">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/Compressed/poi-3.9.jar/poi-3.9.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>

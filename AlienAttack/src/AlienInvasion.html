@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <title>
+      Alien Attack
+    </title>
+    <link rel="stylesheet" href="stylesheet.css">
+  </head>
+  <body>
+    <section id="game">
+      <h1>Alien Attack</h1>
+    <div id="stage">
+      <div id="background"></div>
+      <div id="won"></div>
+      <div id="lost"></div>
+      <div id="footer"></div>
+      <div id="cannon"></div>
+      <div id="missile"></div>
+      <div id="alien"></div>
+      <div id="blast"></div>
+    </div>
+    <p id="output">Enter the alien location(0-300) to shoot</p>
+    <input type="text" id="inputX" placeholder="X" autofocus>
+    <input type="text" id="inputY" placeholder="Y">
+    <button>Fire</button>
+  </section>
+    <script>
+      var alienX=80;
+      var alienY=20;
+      var guessX=0;
+      var guessY=0;
+      var shotsRemaining=8;
+      var shotsMade=0;
+      var gameState="";
+      var gameWon=false;
+
+      var background=document.querySelector("#background");
+      var footer=document.querySelector("#footer");
+      var won=document.querySelector("#won");
+      var lost=document.querySelector("#lost");
+      var cannon=document.querySelector("#cannon");
+      var alien=document.querySelector("#alien");
+      var missile=document.querySelector("#missile");
+      var blast=document.querySelector("#blast");
+      var inputX=document.querySelector("#inputX");
+      var inputY=document.querySelector("#inputY");
+      var output=document.querySelector("#output");
+
+      var button=document.querySelector("button");
+      button.style.cursor="pointer";
+      button.addEventListener("click",clickHandler,false);
+      background.src="../images/background.png";
+      missile.style.visibility="hidden";
+      footer.style.visibility="hidden";
+      won.style.visibility="hidden";
+      lost.style.visibility="hidden";
+      blast.style.visibility="hidden";
+
+      function render(){
+      alien.style.left=alienX+"px";
+      alien.style.top=alienY+"px";
+
+      cannon.style.left=guessX+"px";
+      missile.style.visibility="visible";
+      missile.style.left=guessX+"px";
+      missile.style.top=guessY+"px";
+      setTimeout(function(){
+        missile.style.visibility="hidden";
+      },100);
+      }
+
+      function clickHandler(){
+      playGame();
+      }
+
+      function playGame(){
+      shotsRemaining=shotsRemaining-1;
+      shotsMade=shotsMade+1;
+      gameState="Shots: "+shotsMade+",Remaining: "+shotsRemaining;
+
+      guessX=parseInt(inputX.value);
+      guessY=parseInt(inputY.value);
+
+      if(guessX >= alienX && guessX <= alienX+20){
+				       if(guessY >= alienY && guessY <= alienY+20){
+                 blast.style.left=guessX+"px";
+                 blast.style.top=guessY+"px";
+                 blast.style.visibility="visible";
+									gameWon=true;
+									endGame();
+									}
+									}
+									else{
+									output.innerHTML="Missed"+"<br/>"+gameState;
+									if(shotsRemaining < 1){
+											    endGame();
+											    }
+											    }
+											    if(!gameWon){
+                            alienX=Math.floor(Math.random()*280);
+                            alienY+=30;
+											    }
+          render();
+          console.log("X: "+alienX);
+          console.log("Y: "+alienY);
+      }
+
+      function endGame(){
+        alien.style.visibility="hidden";
+        cannon.style.visibility="hidden";
+        inputX.style.visibility="hidden";
+        inputY.style.visibility="hidden";
+        output.style.visibility="hidden";
+        button.style.visibility="hidden";
+        footer.style.visibility="visible";
+        button.disabled=true;
+        if(gameWon){
+          background.style.visibility="hidden";
+          won.style.visibility="visible";
+          /*output.innerHTML="Hi! You saved the earth!\n"+"<br>"+"It only took you "+shotsMade+" shots.";*/
+        }else{
+          background.style.visibility="hidden";
+          lost.style.visibility="visible";
+          /*output.innerHTML="\t\tYou lost!\n"+"<br>"+"The earth has been invaded!";*/
+        }
+      }
+      </script>
+    </body>
+</html>

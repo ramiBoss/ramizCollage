@@ -1,0 +1,6 @@
+function Box(x,y){
+    this.x=x;
+    this.y=y;
+    size=10;
+    rect(this.x,this.y,this.x+size,this.y+size);
+}

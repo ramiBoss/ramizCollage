@@ -1,0 +1,125 @@
+@font-face {
+  font-family: Airacobra;
+  src: url("../fonts/Airacobra Alt.ttf");
+  }
+
+  @font-face {
+    font-family: Good-Times;
+    src: url("../fonts/Precious.ttf");
+    }
+#game{
+  margin: 0px auto;
+  width: 330px;
+  height: auto;
+  padding: 15px;
+  border: black;
+  background-color: #0B5345;
+  background: linear-gradient(top,#588063,#000);
+  box-shadow: 5px 5px 5px rgbs(0,0,0,0.5);
+  border-radius: 10px;
+}
+#banner{
+  width: 330px;
+  height:500px;
+  position: absolute;
+  top: 0px;
+  background-image: url(../images/banner.png);
+}
+  #stage{
+    width: 300px;
+    height: 300px;
+    left: 15;
+    position: relative;
+  }
+  #background{
+    width: 300px;
+    height:300px;
+    position: absolute;
+    top: 0px;
+    background-image: url(../images/background.png);
+  }
+  #footer{
+    width: 300px;
+    height: 100px;
+    position: absolute;
+    top: 300px;
+    bottom: 0px;
+    background-image: url(../images/footer.png);
+  }
+  #won{
+    width: 300px;
+    height:300px;
+    position: absolute;
+    top: 0px;
+    background-image: url(../images/won.png);
+  }
+  #lost{
+    width: 300px;
+    height:300px;
+    position: absolute;
+    top: 0px;
+    background-image: url(../images/lost.png);
+  }
+  #cannon{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 270px;
+    left: 140px;
+    background-image: url(../images/cannon.png);
+  }
+  #alien{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 20px;
+    left: 80px;
+    background-image: url(../images/alien.png);
+  }
+  #missile{
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 240px;
+    left: 145px;
+    background-image: url(../images/missile.png);
+  }
+  #blast{
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background-image: url(../images/blast.png);
+  }
+  input[type=text]{
+    width: 100px;
+    height: 20px;
+    font-family: Airacobra;
+    /*border-radius: 10px;*/
+    background-color: #581845;
+    border: #0B5345;
+  }
+  button{
+    width: 100px;
+    height: 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: Airacobra;
+    font-weight:bolder;
+    border: #0B5345;
+    background-color: #FFC300;
+  }
+  body{
+    background-color: #808080;
+  }
+  p{
+    font-family: Good-Times;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+  }
+  h1{
+    font-family: Airacobra;
+    text-shadow: 10px 3px black;
+    text-align: center;
+    color: RED;
+  }

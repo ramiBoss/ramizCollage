@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>{{ enum }} Home </title>
+  {% load static %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% bootstrap_messages %}
+</head>
+<body>
+  <div class="container">
+    <div class="masthead clearfix">
+      <div class="inner">
+        <h3 class="masthead-brand">ClgMng</h3>
+        <nav>
+          <ul class="nav masthead-nav">
+            <li class="active">Home</li>
+            <li><a href="logout" >Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div>
+      <table class="table table-stripped">
+        <caption>Your Profile</caption>
+        <tr><td>{{ std.name }}</td></tr>
+        <tr><td>{{ std.enum }}</td></tr>
+        <tr><td>{{ std.fnum }}</td></tr>
+      </table>
+    </div>
+    <div>
+      {% if data %}
+        <table class="table table-striped">
+          <caption>Enrolled Courses</caption>
+          <thead><tr><td>Course Code</td></tr></thead>
+            <tr><td>{{ data.courseId1 }}</td></tr>
+            <tr><td>{{ data.courseId2 }}</td></tr>
+            <tr><td>{{ data.courseId3 }}</td></tr>
+            <tr><td>{{ data.courseId4 }}</td></tr>
+            <tr><td>{{ data.courseId5 }}</td></tr>
+            {% if data.courseId6 %}
+              <tr><td>{{ data.courseId6 }}</td></tr>
+            {% endif %}
+            {% if data.courseId7 %}
+              <tr><td>{{ data.courseId7 }}</td></tr>
+            {% endif %}
+        </table>
+      {% else %}
+        <table class="table table-striped">
+            <tr><td>You haven't registered for any course yet.</td></tr>
+            <tr><td><a href="course_reg">Register for courses here</td></tr>
+        </table>
+      {% endif %}
+    </div>
+</div>
+</body>
+</html>

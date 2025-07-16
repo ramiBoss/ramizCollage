@@ -1,0 +1,8 @@
+function Ball(x,y,d,col){
+    var this.x=x;
+    var this.y=y;
+    var this.d=d;
+    noStroke();
+    fill()
+    ellipse(this.x,this.y.this.d,this.d);
+}

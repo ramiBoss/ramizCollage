@@ -1,0 +1,17 @@
+var x;
+var y;
+var r=0,g=150,b=180;
+var s;
+function setup(){
+    createCanvas(600,400);
+    background(r,g,b);
+}
+
+function draw(){
+    x=random(0,600);
+    y=random(0,400);
+    r=random(0,255);
+    g=random(0,255);
+    b=random(0,255);
+    s=new star(x,y,r,g,b);
+}

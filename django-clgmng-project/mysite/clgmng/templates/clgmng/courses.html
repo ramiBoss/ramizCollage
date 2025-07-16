@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>All Courses</title>
+    {% load static %}
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+  </head>
+<body>
+  <div class="container">
+    {% if data %}
+      <table class="table table-striped">
+        <caption>All Available Courses</caption>
+        <thead><tr>
+          <td>Course Code</td>
+          <td>Course Title</td>
+          <td>Course Tutor</td>
+        </tr></thead>
+        {% for field in data%}
+        <tr>
+          <td>{{field.courseTitle}}</td>
+          <td>{{field.courseCode}}</td>
+          {% if field.courseTutor %}
+            <td>{{field.courseTutor}}</td>
+          {% else %}
+            <td>No Tutor Assigned</td>
+          {% endif %}
+        </tr>
+        {% endfor%}
+      </table>
+    {% else %}
+      <caption>No Course Found</caption>
+    {% endif%}
+  </div>
+</body>
+</html>

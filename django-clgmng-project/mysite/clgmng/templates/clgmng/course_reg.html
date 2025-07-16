@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>Course Registration</title>
+  {% load static %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% bootstrap_messages %}
+</head>
+<body>
+  <div class="container">
+    Courses Registration Here
+    <div class="form-signin">
+      <form name="form" action="" method="POST" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% for field in bootstrap_form %}
+          {% bootstrap_field field %}
+        {% endfor %}
+      <button type="submit" class="btn btn-primary">
+      {% bootstrap_icon "star" %} Submit
+      </button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

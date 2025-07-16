@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Collage Management</title>
+        {% load static %}
+        {% load bootstrap3 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+        <link rel="stylesheet" href="{% static 'clgmng/css/cover.css' %}">
+    </head>
+    <body>
+      <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">ClgMng</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="std_login" >Student Login</a></li>
+                  <li><a href="tec_login" >Teacher Login</a></li>
+                  <li><a href="std_reg" >Student Register</a></li>
+                  <li><a href="tec_reg ">Teacher Register</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="inner cover">
+            <h1 class="cover-heading">Welcome To ClgMng.</h1>
+            <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+            <p class="lead">
+              <a href="#" class="btn btn-lg btn-default">Learn more</a>
+            </p>
+          </div>
+          <div class="mastfoot">
+            <div class="inner">
+              <p>&copy ClgMng Project Under GNU Public License </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </body>
+</html>

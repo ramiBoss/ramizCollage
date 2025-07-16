@@ -1,0 +1,45 @@
+<html>
+<head>
+  <title>Student Registration</title>
+  {% load static %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% bootstrap_messages %}
+  <!--<link rel="stylesheet" href="{% static 'clgmng/css/form.css' %}">-->
+</head>
+<body>
+
+  <div class="container">
+    Student Register Here
+    <!--<table>-->
+    <div class="form-signin">
+      <form name="form" action="" method="POST" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% for field in bootstrap_form %}
+          {% bootstrap_field field %}
+        {% endfor %}
+      <!--  {% for field in form %}
+        <tr><td>{{ field.label_tag }}</td>
+          <td>{{ field }}</td>
+          {% if field.help_text %}
+            <small style="color: grey"><td>{{ field.help_text }}</td></small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red"><td>{{ error }}</td></p>
+          {% endfor %}
+        {% endfor%}
+      </tr>
+      <tr><td>-->
+      <button type="submit" class="btn btn-primary">
+      {% bootstrap_icon "star" %} Submit
+      </button>
+      <!--
+        <button type="submit">Register</button></td></tr>-->
+      </form>
+    </div>
+    <!--</table>-->
+  </div>
+</body>
+</html>

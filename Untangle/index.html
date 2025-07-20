@@ -1,12 +1,59 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Untangle Game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untangle - Modern Puzzle Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/untangle.css">
 </head>
 <body>
-  <!--<h1>Untangle Game</h1>-->
-  <canvas id="game" width="768" height="400">
-  </canvas>
+  <div class="game-container">
+    <header class="game-header">
+      <h1 class="game-title">🔗 UNTANGLE</h1>
+      <p class="game-subtitle">Drag the circles to untangle all the lines!</p>
+      <div class="game-stats">
+        <div class="stat-item">
+          <span class="stat-label">Level:</span>
+          <span id="level" class="stat-value">1</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Moves:</span>
+          <span id="moves" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Intersections:</span>
+          <span id="intersections" class="stat-value">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="game-area">
+      <canvas id="game" width="800" height="500">
+        Your browser does not support the HTML5 canvas element.
+      </canvas>
+      
+      <div class="game-status" id="gameStatus">
+        Drag the yellow circles to untangle the lines!
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="newGameBtn" class="btn btn-primary">New Game</button>
+      <button id="hintBtn" class="btn btn-secondary">Hint</button>
+      <button id="resetBtn" class="btn btn-secondary">Reset</button>
+      <div class="difficulty-selector">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy (5 circles)</option>
+          <option value="medium" selected>Medium (7 circles)</option>
+          <option value="hard">Hard (10 circles)</option>
+          <option value="expert">Expert (15 circles)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/untangle.js"></script>
 </body>

@@ -1,125 +1,537 @@
+/* Modern Alien Attack Game Styles */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+
 @font-face {
   font-family: Airacobra;
   src: url("../fonts/Airacobra Alt.ttf");
-  }
+}
 
-  @font-face {
-    font-family: Good-Times;
-    src: url("../fonts/Precious.ttf");
-    }
-#game{
-  margin: 0px auto;
-  width: 330px;
-  height: auto;
-  padding: 15px;
-  border: black;
-  background-color: #0B5345;
-  background: linear-gradient(top,#588063,#000);
-  box-shadow: 5px 5px 5px rgbs(0,0,0,0.5);
-  border-radius: 10px;
+@font-face {
+  font-family: Good-Times;
+  src: url("../fonts/Precious.ttf");
 }
-#banner{
-  width: 330px;
-  height:500px;
+
+:root {
+  --primary-bg: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d1b69 100%);
+  --secondary-bg: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  --accent-color: #00ff41;
+  --danger-color: #ff073a;
+  --warning-color: #ffaa00;
+  --text-primary: #ffffff;
+  --text-secondary: #b8b8b8;
+  --game-bg: rgba(15, 15, 35, 0.95);
+  --border-radius: 12px;
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glow-effect: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--primary-bg);
+  min-height: 100vh;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="80" cy="30" r="0.5" fill="white" opacity="0.5"/><circle cx="30" cy="70" r="1.5" fill="white" opacity="0.2"/><circle cx="70" cy="80" r="0.8" fill="white" opacity="0.4"/><circle cx="50" cy="10" r="0.3" fill="white" opacity="0.6"/></svg>') repeat;
+  animation: twinkle 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+#gameContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 30px;
+  background: var(--game-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.game-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, var(--accent-color), #00d4ff, var(--accent-color));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2s ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+  margin-bottom: 20px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.game-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.stat-item {
+  background: rgba(0, 255, 65, 0.1);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  min-width: 120px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  display: block;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  text-shadow: var(--glow-effect);
+}
+
+#game {
+  background: var(--game-bg);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  flex: 1;
+  backdrop-filter: blur(10px);
+}
+
+#stage {
+  width: 320px;
+  height: 320px;
+  margin: 0 auto 30px;
+  position: relative;
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: inset 0 0 50px rgba(0, 255, 65, 0.1), var(--glow-effect);
+  background: linear-gradient(135deg, #001122 0%, #003344 100%);
+}
+
+#background {
+  width: 100%;
+  height: 100%;
   position: absolute;
-  top: 0px;
-  background-image: url(../images/banner.png);
+  top: 0;
+  left: 0;
+  background-image: url(../images/background.png);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
 }
-  #stage{
-    width: 300px;
-    height: 300px;
-    left: 15;
-    position: relative;
+
+.game-end-screen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.end-message {
+  text-align: center;
+  padding: 40px;
+  background: var(--game-bg);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--accent-color);
+  box-shadow: var(--glow-effect);
+}
+
+.end-message h2 {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  text-shadow: var(--glow-effect);
+}
+
+.end-message p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: var(--text-secondary);
+}
+
+#footer {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  background-image: url(../images/footer.png);
+  background-size: cover;
+  opacity: 0.7;
+}
+
+#won {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background-image: url(../images/won.png);
+  background-size: cover;
+}
+
+#lost {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background-image: url(../images/lost.png);
+  background-size: cover;
+}
+
+#cannon {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: url(../images/cannon.png);
+  background-size: contain;
+  filter: drop-shadow(0 0 10px var(--accent-color));
+  transition: all 0.3s ease;
+}
+
+#alien {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  background-image: url(../images/alien.png);
+  background-size: contain;
+  filter: drop-shadow(0 0 15px var(--danger-color));
+  animation: alienPulse 1s ease-in-out infinite alternate;
+  transition: all 0.3s ease;
+}
+
+@keyframes alienPulse {
+  0% { filter: drop-shadow(0 0 15px var(--danger-color)) brightness(1); }
+  100% { filter: drop-shadow(0 0 25px var(--danger-color)) brightness(1.2); }
+}
+
+#missile {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  background-image: url(../images/missile.png);
+  background-size: contain;
+  filter: drop-shadow(0 0 10px var(--warning-color));
+  z-index: 50;
+}
+
+#blast {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  background-image: url(../images/blast.png);
+  background-size: contain;
+  filter: drop-shadow(0 0 20px var(--warning-color));
+  animation: blastEffect 0.5s ease-out;
+  z-index: 60;
+}
+
+@keyframes blastEffect {
+  0% { transform: scale(0.5); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--warning-color);
+  border-radius: 50%;
+  animation: particleEffect 1s ease-out forwards;
+  box-shadow: 0 0 10px var(--warning-color);
+}
+
+@keyframes particleEffect {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
   }
-  #background{
-    width: 300px;
-    height:300px;
-    position: absolute;
-    top: 0px;
-    background-image: url(../images/background.png);
+  100% {
+    transform: scale(0) translate(var(--random-x, 50px), var(--random-y, 50px));
+    opacity: 0;
   }
-  #footer{
-    width: 300px;
-    height: 100px;
-    position: absolute;
-    top: 300px;
-    bottom: 0px;
-    background-image: url(../images/footer.png);
+}
+
+.controls {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.game-message {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(0, 255, 65, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+input[type="number"] {
+  width: 120px;
+  height: 45px;
+  padding: 0 15px;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(0, 255, 65, 0.3);
+  border-radius: 8px;
+  color: var(--accent-color);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  background: rgba(0, 0, 0, 0.9);
+}
+
+input[type="number"]::placeholder {
+  color: rgba(0, 255, 65, 0.5);
+}
+
+.fire-btn, .reset-btn, .action-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 15px 30px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 160px;
+}
+
+.fire-btn {
+  background: linear-gradient(45deg, var(--danger-color), #ff4757);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 7, 58, 0.3);
+}
+
+.fire-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 7, 58, 0.4);
+  background: linear-gradient(45deg, #ff4757, var(--danger-color));
+}
+
+.fire-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(255, 7, 58, 0.3);
+}
+
+.reset-btn, .action-btn {
+  background: linear-gradient(45deg, var(--accent-color), #00d4ff);
+  color: #001122;
+  box-shadow: 0 4px 15px rgba(0, 255, 65, 0.3);
+}
+
+.reset-btn:hover, .action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 65, 0.4);
+  background: linear-gradient(45deg, #00d4ff, var(--accent-color));
+}
+
+.reset-btn:active, .action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 255, 65, 0.3);
+}
+
+.game-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Legacy styles for compatibility */
+p {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+}
+
+h1 {
+  font-family: 'Orbitron', monospace;
+  text-shadow: 10px 3px black;
+  text-align: center;
+  color: var(--accent-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #gameContainer {
+    padding: 15px;
   }
-  #won{
-    width: 300px;
-    height:300px;
-    position: absolute;
-    top: 0px;
-    background-image: url(../images/won.png);
+  
+  .game-title {
+    font-size: 2rem;
   }
-  #lost{
-    width: 300px;
-    height:300px;
-    position: absolute;
-    top: 0px;
-    background-image: url(../images/lost.png);
+  
+  .game-stats {
+    flex-direction: column;
+    align-items: center;
   }
-  #cannon{
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 270px;
-    left: 140px;
-    background-image: url(../images/cannon.png);
+  
+  #stage {
+    width: 280px;
+    height: 280px;
   }
-  #alien{
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 20px;
-    left: 80px;
-    background-image: url(../images/alien.png);
+  
+  .input-group {
+    flex-direction: column;
+    align-items: center;
   }
-  #missile{
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    top: 240px;
-    left: 145px;
-    background-image: url(../images/missile.png);
+  
+  input[type="number"] {
+    width: 200px;
   }
-  #blast{
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    background-image: url(../images/blast.png);
+  
+  .fire-btn, .reset-btn, .action-btn {
+    width: 200px;
+    margin: 8px 0;
   }
-  input[type=text]{
-    width: 100px;
-    height: 20px;
-    font-family: Airacobra;
-    /*border-radius: 10px;*/
-    background-color: #581845;
-    border: #0B5345;
+}
+
+@media (max-width: 480px) {
+  .game-title {
+    font-size: 1.5rem;
   }
-  button{
-    width: 100px;
-    height: 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-family: Airacobra;
-    font-weight:bolder;
-    border: #0B5345;
-    background-color: #FFC300;
+  
+  #stage {
+    width: 250px;
+    height: 250px;
   }
-  body{
-    background-color: #808080;
+  
+  #game {
+    padding: 20px;
   }
-  p{
-    font-family: Good-Times;
-    font-size: 18px;
-    text-align: center;
-    font-weight: bold;
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  h1{
-    font-family: Airacobra;
-    text-shadow: 10px 3px black;
-    text-align: center;
-    color: RED;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+#gameContainer > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+#gameContainer > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#gameContainer > *:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Accessibility improvements */
+button:focus, input:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

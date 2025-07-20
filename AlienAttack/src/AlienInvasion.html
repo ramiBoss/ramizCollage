@@ -1,128 +1,379 @@
-<html>
-  <head>
-    <title>
-      Alien Attack
-    </title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Attack - Defend Earth!</title>
     <link rel="stylesheet" href="stylesheet.css">
-  </head>
-  <body>
-    <section id="game">
-      <h1>Alien Attack</h1>
-    <div id="stage">
-      <div id="background"></div>
-      <div id="won"></div>
-      <div id="lost"></div>
-      <div id="footer"></div>
-      <div id="cannon"></div>
-      <div id="missile"></div>
-      <div id="alien"></div>
-      <div id="blast"></div>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="gameContainer">
+        <header class="game-header">
+            <h1 class="game-title">🛸 ALIEN ATTACK 🛸</h1>
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Score:</span>
+                    <span id="score" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Shots:</span>
+                    <span id="shotsDisplay" class="stat-value">8</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Level:</span>
+                    <span id="level" class="stat-value">1</span>
+                </div>
+            </div>
+        </header>
+
+        <main id="game">
+            <div id="stage">
+                <div id="background"></div>
+                <div id="won" class="game-end-screen">
+                    <div class="end-message">
+                        <h2>🎉 EARTH SAVED! 🎉</h2>
+                        <p>You defeated the alien invasion!</p>
+                        <button id="playAgain" class="action-btn">Play Again</button>
+                    </div>
+                </div>
+                <div id="lost" class="game-end-screen">
+                    <div class="end-message">
+                        <h2>💥 EARTH INVADED! 💥</h2>
+                        <p>The aliens have taken over...</p>
+                        <button id="tryAgain" class="action-btn">Try Again</button>
+                    </div>
+                </div>
+                <div id="footer"></div>
+                <div id="cannon"></div>
+                <div id="missile"></div>
+                <div id="alien"></div>
+                <div id="blast"></div>
+                <div id="particles"></div>
+            </div>
+
+            <div class="controls">
+                <div id="output" class="game-message">
+                    Enter coordinates to target the alien (X: 0-280, Y: 0-280)
+                </div>
+                <div class="input-group">
+                    <div class="input-container">
+                        <label for="inputX">X Coordinate</label>
+                        <input type="number" id="inputX" placeholder="X" min="0" max="280" autofocus>
+                    </div>
+                    <div class="input-container">
+                        <label for="inputY">Y Coordinate</label>
+                        <input type="number" id="inputY" placeholder="Y" min="0" max="280">
+                    </div>
+                </div>
+                <button id="fireButton" class="fire-btn">🚀 FIRE MISSILE</button>
+                <button id="resetButton" class="reset-btn">🔄 Reset Game</button>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <p>Defend Earth from alien invasion! Use your targeting system wisely.</p>
+        </footer>
     </div>
-    <p id="output">Enter the alien location(0-300) to shoot</p>
-    <input type="text" id="inputX" placeholder="X" autofocus>
-    <input type="text" id="inputY" placeholder="Y">
-    <button>Fire</button>
-  </section>
     <script>
-      var alienX=80;
-      var alienY=20;
-      var guessX=0;
-      var guessY=0;
-      var shotsRemaining=8;
-      var shotsMade=0;
-      var gameState="";
-      var gameWon=false;
+        class AlienAttackGame {
+            constructor() {
+                this.alienX = this.getRandomPosition(280);
+                this.alienY = 20;
+                this.guessX = 0;
+                this.guessY = 0;
+                this.shotsRemaining = 8;
+                this.shotsMade = 0;
+                this.score = 0;
+                this.level = 1;
+                this.gameState = "";
+                this.gameWon = false;
+                this.gameActive = true;
+                this.alienSpeed = 2;
+                this.maxAlienY = 250;
+                
+                this.initializeElements();
+                this.initializeEventListeners();
+                this.startGame();
+            }
 
-      var background=document.querySelector("#background");
-      var footer=document.querySelector("#footer");
-      var won=document.querySelector("#won");
-      var lost=document.querySelector("#lost");
-      var cannon=document.querySelector("#cannon");
-      var alien=document.querySelector("#alien");
-      var missile=document.querySelector("#missile");
-      var blast=document.querySelector("#blast");
-      var inputX=document.querySelector("#inputX");
-      var inputY=document.querySelector("#inputY");
-      var output=document.querySelector("#output");
+            initializeElements() {
+                this.elements = {
+                    background: document.querySelector("#background"),
+                    footer: document.querySelector("#footer"),
+                    won: document.querySelector("#won"),
+                    lost: document.querySelector("#lost"),
+                    cannon: document.querySelector("#cannon"),
+                    alien: document.querySelector("#alien"),
+                    missile: document.querySelector("#missile"),
+                    blast: document.querySelector("#blast"),
+                    particles: document.querySelector("#particles"),
+                    inputX: document.querySelector("#inputX"),
+                    inputY: document.querySelector("#inputY"),
+                    output: document.querySelector("#output"),
+                    fireButton: document.querySelector("#fireButton"),
+                    resetButton: document.querySelector("#resetButton"),
+                    playAgain: document.querySelector("#playAgain"),
+                    tryAgain: document.querySelector("#tryAgain"),
+                    score: document.querySelector("#score"),
+                    shotsDisplay: document.querySelector("#shotsDisplay"),
+                    level: document.querySelector("#level")
+                };
+            }
 
-      var button=document.querySelector("button");
-      button.style.cursor="pointer";
-      button.addEventListener("click",clickHandler,false);
-      background.src="../images/background.png";
-      missile.style.visibility="hidden";
-      footer.style.visibility="hidden";
-      won.style.visibility="hidden";
-      lost.style.visibility="hidden";
-      blast.style.visibility="hidden";
+            initializeEventListeners() {
+                this.elements.fireButton.addEventListener("click", () => this.handleFire());
+                this.elements.resetButton.addEventListener("click", () => this.resetGame());
+                this.elements.playAgain.addEventListener("click", () => this.resetGame());
+                this.elements.tryAgain.addEventListener("click", () => this.resetGame());
+                
+                // Allow Enter key to fire
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" && this.gameActive) {
+                        this.handleFire();
+                    }
+                });
 
-      function render(){
-      alien.style.left=alienX+"px";
-      alien.style.top=alienY+"px";
+                // Input validation
+                [this.elements.inputX, this.elements.inputY].forEach(input => {
+                    input.addEventListener("input", this.validateInput.bind(this));
+                });
+            }
 
-      cannon.style.left=guessX+"px";
-      missile.style.visibility="visible";
-      missile.style.left=guessX+"px";
-      missile.style.top=guessY+"px";
-      setTimeout(function(){
-        missile.style.visibility="hidden";
-      },100);
-      }
+            validateInput(e) {
+                const value = parseInt(e.target.value);
+                if (value < 0) e.target.value = 0;
+                if (value > 280) e.target.value = 280;
+            }
 
-      function clickHandler(){
-      playGame();
-      }
+            startGame() {
+                this.setInitialStyles();
+                this.updateDisplay();
+                this.render();
+                this.startAlienMovement();
+            }
 
-      function playGame(){
-      shotsRemaining=shotsRemaining-1;
-      shotsMade=shotsMade+1;
-      gameState="Shots: "+shotsMade+",Remaining: "+shotsRemaining;
+            setInitialStyles() {
+                this.elements.missile.style.visibility = "hidden";
+                this.elements.footer.style.visibility = "hidden";
+                this.elements.won.style.visibility = "hidden";
+                this.elements.lost.style.visibility = "hidden";
+                this.elements.blast.style.visibility = "hidden";
+                this.elements.fireButton.style.cursor = "pointer";
+                this.elements.resetButton.style.cursor = "pointer";
+            }
 
-      guessX=parseInt(inputX.value);
-      guessY=parseInt(inputY.value);
+            startAlienMovement() {
+                this.alienMovementInterval = setInterval(() => {
+                    if (this.gameActive && !this.gameWon) {
+                        this.alienY += this.alienSpeed;
+                        if (this.alienY >= this.maxAlienY) {
+                            this.endGame(false);
+                        } else {
+                            this.render();
+                        }
+                    }
+                }, 500);
+            }
 
-      if(guessX >= alienX && guessX <= alienX+20){
-				       if(guessY >= alienY && guessY <= alienY+20){
-                 blast.style.left=guessX+"px";
-                 blast.style.top=guessY+"px";
-                 blast.style.visibility="visible";
-									gameWon=true;
-									endGame();
-									}
-									}
-									else{
-									output.innerHTML="Missed"+"<br/>"+gameState;
-									if(shotsRemaining < 1){
-											    endGame();
-											    }
-											    }
-											    if(!gameWon){
-                            alienX=Math.floor(Math.random()*280);
-                            alienY+=30;
-											    }
-          render();
-          console.log("X: "+alienX);
-          console.log("Y: "+alienY);
-      }
+            render() {
+                this.elements.alien.style.left = this.alienX + "px";
+                this.elements.alien.style.top = this.alienY + "px";
+                this.elements.cannon.style.left = this.guessX + "px";
+            }
 
-      function endGame(){
-        alien.style.visibility="hidden";
-        cannon.style.visibility="hidden";
-        inputX.style.visibility="hidden";
-        inputY.style.visibility="hidden";
-        output.style.visibility="hidden";
-        button.style.visibility="hidden";
-        footer.style.visibility="visible";
-        button.disabled=true;
-        if(gameWon){
-          background.style.visibility="hidden";
-          won.style.visibility="visible";
-          /*output.innerHTML="Hi! You saved the earth!\n"+"<br>"+"It only took you "+shotsMade+" shots.";*/
-        }else{
-          background.style.visibility="hidden";
-          lost.style.visibility="visible";
-          /*output.innerHTML="\t\tYou lost!\n"+"<br>"+"The earth has been invaded!";*/
+            handleFire() {
+                if (!this.gameActive) return;
+                
+                this.guessX = parseInt(this.elements.inputX.value) || 0;
+                this.guessY = parseInt(this.elements.inputY.value) || 0;
+                
+                if (this.guessX < 0 || this.guessX > 280 || this.guessY < 0 || this.guessY > 280) {
+                    this.updateMessage("Invalid coordinates! Use 0-280 for both X and Y.");
+                    return;
+                }
+
+                this.playGame();
+            }
+
+            playGame() {
+                this.shotsRemaining--;
+                this.shotsMade++;
+                this.gameState = `Shot ${this.shotsMade} fired!`;
+
+                this.animateMissile();
+
+                const hit = this.checkHit();
+                
+                if (hit) {
+                    this.handleHit();
+                } else {
+                    this.handleMiss();
+                }
+
+                this.updateDisplay();
+                this.clearInputs();
+            }
+
+            animateMissile() {
+                this.elements.missile.style.visibility = "visible";
+                this.elements.missile.style.left = this.guessX + "px";
+                this.elements.missile.style.top = this.guessY + "px";
+                
+                // Add trajectory animation
+                this.elements.missile.style.transition = "all 0.3s ease-out";
+                
+                setTimeout(() => {
+                    this.elements.missile.style.visibility = "hidden";
+                    this.elements.missile.style.transition = "none";
+                }, 300);
+            }
+
+            checkHit() {
+                const tolerance = 25; // Slightly more forgiving hit detection
+                return (this.guessX >= this.alienX - tolerance && this.guessX <= this.alienX + tolerance) &&
+                       (this.guessY >= this.alienY - tolerance && this.guessY <= this.alienY + tolerance);
+            }
+
+            handleHit() {
+                this.elements.blast.style.left = this.alienX + "px";
+                this.elements.blast.style.top = this.alienY + "px";
+                this.elements.blast.style.visibility = "visible";
+                
+                this.createParticleEffect();
+                
+                this.score += this.level * 100;
+                this.gameWon = true;
+                
+                setTimeout(() => {
+                    this.endGame(true);
+                }, 1000);
+                
+                this.updateMessage("🎯 DIRECT HIT! Alien destroyed!");
+            }
+
+            handleMiss() {
+                const distance = Math.sqrt(
+                    Math.pow(this.guessX - this.alienX, 2) + 
+                    Math.pow(this.guessY - this.alienY, 2)
+                );
+                
+                let feedback = "💫 Missed! ";
+                if (distance < 30) feedback += "Very close!";
+                else if (distance < 60) feedback += "Close!";
+                else if (distance < 100) feedback += "Getting warmer...";
+                else feedback += "Way off target!";
+                
+                this.updateMessage(feedback);
+                
+                if (this.shotsRemaining < 1) {
+                    this.endGame(false);
+                } else {
+                    // Move alien to new position after near miss
+                    if (distance < 50) {
+                        this.alienX = this.getRandomPosition(280);
+                    }
+                }
+            }
+
+            createParticleEffect() {
+                const particles = this.elements.particles;
+                particles.innerHTML = "";
+                
+                for (let i = 0; i < 10; i++) {
+                    const particle = document.createElement("div");
+                    particle.className = "particle";
+                    particle.style.left = (this.alienX + Math.random() * 40 - 20) + "px";
+                    particle.style.top = (this.alienY + Math.random() * 40 - 20) + "px";
+                    particles.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            }
+
+            endGame(won) {
+                this.gameActive = false;
+                clearInterval(this.alienMovementInterval);
+                
+                this.elements.alien.style.visibility = "hidden";
+                this.elements.cannon.style.visibility = "hidden";
+                this.elements.inputX.style.visibility = "hidden";
+                this.elements.inputY.style.visibility = "hidden";
+                this.elements.output.style.visibility = "hidden";
+                this.elements.fireButton.style.visibility = "hidden";
+                this.elements.footer.style.visibility = "visible";
+                
+                if (won) {
+                    this.elements.background.style.visibility = "hidden";
+                    this.elements.won.style.visibility = "visible";
+                    this.level++;
+                    this.score += this.shotsRemaining * 50; // Bonus for remaining shots
+                } else {
+                    this.elements.background.style.visibility = "hidden";
+                    this.elements.lost.style.visibility = "visible";
+                }
+                
+                this.updateDisplay();
+            }
+
+            resetGame() {
+                // Reset all game state
+                this.alienX = this.getRandomPosition(280);
+                this.alienY = 20;
+                this.guessX = 0;
+                this.guessY = 0;
+                this.shotsRemaining = 8;
+                this.shotsMade = 0;
+                this.gameWon = false;
+                this.gameActive = true;
+                this.alienSpeed = Math.min(this.level + 1, 5); // Increase difficulty
+                
+                // Reset visibility
+                this.elements.background.style.visibility = "visible";
+                this.elements.won.style.visibility = "hidden";
+                this.elements.lost.style.visibility = "hidden";
+                this.elements.footer.style.visibility = "hidden";
+                this.elements.blast.style.visibility = "hidden";
+                this.elements.alien.style.visibility = "visible";
+                this.elements.cannon.style.visibility = "visible";
+                this.elements.inputX.style.visibility = "visible";
+                this.elements.inputY.style.visibility = "visible";
+                this.elements.output.style.visibility = "visible";
+                this.elements.fireButton.style.visibility = "visible";
+                this.elements.particles.innerHTML = "";
+                
+                this.clearInputs();
+                this.updateDisplay();
+                this.updateMessage("New game started! Target the alien before it reaches the bottom.");
+                this.render();
+                this.startAlienMovement();
+            }
+
+            getRandomPosition(max) {
+                return Math.floor(Math.random() * max);
+            }
+
+            clearInputs() {
+                this.elements.inputX.value = "";
+                this.elements.inputY.value = "";
+                this.elements.inputX.focus();
+            }
+
+            updateDisplay() {
+                this.elements.score.textContent = this.score;
+                this.elements.shotsDisplay.textContent = this.shotsRemaining;
+                this.elements.level.textContent = this.level;
+            }
+
+            updateMessage(message) {
+                this.elements.output.textContent = message;
+            }
         }
-      }
-      </script>
-    </body>
+
+        // Start the game when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            new AlienAttackGame();
+        });
+    </script>
+</body>
 </html>

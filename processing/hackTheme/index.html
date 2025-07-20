@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔢 Matrix Hack Theme - HTML5/JavaScript</title>
+    
+    <!-- p5.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Source+Code+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #0a0a0a 0%, #001100 50%, #000f00 100%);
+            --matrix-green: #00ff41;
+            --matrix-dark-green: #008f11;
+            --matrix-light-green: #5bfa0d;
+            --text-primary: #00ff41;
+            --text-secondary: #008f11;
+            --glass-bg: rgba(0, 255, 65, 0.1);
+            --border-radius: 15px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --glow-effect: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Code Pro', monospace;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--matrix-green);
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.8);
+            animation: matrixGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes matrixGlow {
+            0% { 
+                text-shadow: 0 0 30px rgba(0, 255, 65, 0.8);
+                filter: brightness(1);
+            }
+            100% { 
+                text-shadow: 0 0 40px rgba(0, 255, 65, 1), 0 0 60px rgba(0, 255, 65, 0.6);
+                filter: brightness(1.2);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .canvas-container {
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--matrix-green), var(--matrix-dark-green), var(--matrix-light-green), var(--matrix-green));
+            background-size: 400% 400%;
+            border-radius: var(--border-radius);
+            z-index: -1;
+            animation: borderFlow 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes borderFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .canvas-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, var(--matrix-dark-green), var(--matrix-green));
+            color: #000;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+            box-shadow: 0 6px 20px rgba(0, 255, 65, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn.active {
+            box-shadow: var(--glow-effect);
+            transform: scale(1.05);
+            background: linear-gradient(45deg, var(--matrix-green), var(--matrix-light-green));
+        }
+
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .setting-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 100px;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .slider {
+            width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(0, 255, 65, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--matrix-green);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--matrix-green);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+        }
+
+        .info {
+            text-align: center;
+            background: var(--glass-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            max-width: 800px;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .info p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--matrix-green);
+            display: block;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        kbd {
+            background: rgba(0, 255, 65, 0.15);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0 2px;
+            color: var(--matrix-green);
+        }
+
+        .matrix-mode {
+            background: #000;
+            color: var(--matrix-green);
+        }
+
+        /* Terminal-style scrolling text */
+        .terminal-text {
+            font-family: 'Source Code Pro', monospace;
+            color: var(--matrix-green);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid var(--matrix-green);
+            animation: typewriter 2s steps(40) infinite;
+        }
+
+        @keyframes typewriter {
+            0% { width: 0; }
+            50% { width: 100%; }
+            100% { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: 200px;
+            }
+            
+            .settings {
+                flex-direction: column;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container > * {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .container > *:nth-child(2) { animation-delay: 0.1s; }
+        .container > *:nth-child(3) { animation-delay: 0.2s; }
+        .container > *:nth-child(4) { animation-delay: 0.3s; }
+        .container > *:nth-child(5) { animation-delay: 0.4s; }
+
+        /* Matrix rain effect overlay */
+        .matrix-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-overlay" id="matrix-bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🔢 MATRIX HACK THEME</h1>
+            <p class="subtitle">Digital Rain Simulation - HTML5/JavaScript</p>
+        </div>
+
+        <div class="canvas-container" id="canvas-container">
+            <!-- p5.js canvas will be inserted here -->
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="toggleAnimation()">⏸️ PAUSE</button>
+            <button class="btn" onclick="toggleMode()">🌀 RAIN MODE</button>
+            <button class="btn" onclick="toggleColors()">🎨 COLOR CYCLE</button>
+            <button class="btn" onclick="captureFrame()">📸 CAPTURE</button>
+            <button class="btn" onclick="toggleFullscreen()">📺 FULLSCREEN</button>
+        </div>
+
+        <div class="settings">
+            <div class="setting-group">
+                <label for="gridSizeSlider">Grid Size:</label>
+                <input type="range" id="gridSizeSlider" class="slider" min="15" max="40" value="30" 
+                       oninput="updateGridSize(this.value)">
+                <span id="gridSizeValue">30</span>
+            </div>
+            <div class="setting-group">
+                <label for="speedSlider">Speed:</label>
+                <input type="range" id="speedSlider" class="slider" min="10" max="200" value="50" 
+                       oninput="updateSpeed(this.value)">
+                <span id="speedValue">50ms</span>
+            </div>
+            <div class="setting-group">
+                <label for="brightnessSlider">Brightness:</label>
+                <input type="range" id="brightnessSlider" class="slider" min="50" max="255" value="150" 
+                       oninput="updateBrightness(this.value)">
+                <span id="brightnessValue">150</span>
+            </div>
+        </div>
+
+        <div class="info">
+            <p><strong>💚 WELCOME TO THE MATRIX - Digital rain simulation with enhanced features!</strong></p>
+            <p><strong>Modes:</strong> Grid Mode (static) • Rain Mode (falling columns) • Color Cycle (rainbow matrix)</p>
+            <p><strong>Features:</strong> Real-time controls • Multiple character sets • Fade effects • Screen capture</p>
+            
+            <div style="margin-top: 15px; padding: 10px; background: rgba(0,255,65,0.05); border-radius: 8px;">
+                <strong>⌨️ Keyboard Controls:</strong>
+                <span style="display: block; font-size: 0.9rem; margin-top: 5px;">
+                    <kbd>Space</kbd> Pause/Resume • <kbd>R</kbd> Rain Mode • <kbd>C</kbd> Color Cycle • <kbd>S</kbd> Screenshot • <kbd>F</kbd> Fullscreen
+                </span>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span id="characterCount" class="stat-value">900</span>
+                    <span class="stat-label">Characters</span>
+                </div>
+                <div class="stat">
+                    <span id="currentMode" class="stat-value">GRID</span>
+                    <span class="stat-label">Mode</span>
+                </div>
+                <div class="stat">
+                    <span id="frameRate" class="stat-value">20</span>
+                    <span class="stat-label">FPS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matrix Hack JavaScript -->
+    <script src="matrix-hack.js"></script>
+</body>
+</html>

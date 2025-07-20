@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ StarField Simulation - HTML5/JavaScript</title>
+    
+    <!-- p5.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            --accent-color: #00d4ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8b8;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --border-radius: 15px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow-effect: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .canvas-container {
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff, #fd79a8, var(--accent-color));
+            background-size: 400% 400%;
+            border-radius: var(--border-radius);
+            z-index: -1;
+            animation: borderGlow 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .canvas-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            color: white;
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00b894, #55a3ff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn.active {
+            box-shadow: var(--glow-effect);
+            transform: scale(1.05);
+        }
+
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .setting-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-group label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 100px;
+        }
+
+        .slider {
+            width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .info {
+            text-align: center;
+            background: var(--glass-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 800px;
+        }
+
+        .info p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        kbd {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: 200px;
+            }
+            
+            .settings {
+                flex-direction: column;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container > * {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .container > *:nth-child(2) { animation-delay: 0.1s; }
+        .container > *:nth-child(3) { animation-delay: 0.2s; }
+        .container > *:nth-child(4) { animation-delay: 0.3s; }
+        .container > *:nth-child(5) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">✨ StarField Simulation</h1>
+            <p class="subtitle">3D Star Travel Experience in HTML5</p>
+        </div>
+
+        <div class="canvas-container" id="canvas-container">
+            <!-- p5.js canvas will be inserted here -->
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="toggleTrails()">🌟 Toggle Trails</button>
+            <button class="btn btn-secondary" onclick="toggleColors()">🎨 Color Mode</button>
+            <button class="btn btn-success" onclick="resetStars()">🔄 Reset</button>
+            <button class="btn btn-primary" onclick="toggleFullscreen()">📺 Fullscreen</button>
+        </div>
+
+        <div class="settings">
+            <div class="setting-group">
+                <label for="starCountSlider">Star Count:</label>
+                <input type="range" id="starCountSlider" class="slider" min="100" max="1000" value="500" 
+                       oninput="updateStarCount(this.value)">
+                <span id="starCountValue">500</span>
+            </div>
+            <div class="setting-group">
+                <label for="maxSpeedSlider">Max Speed:</label>
+                <input type="range" id="maxSpeedSlider" class="slider" min="5" max="30" value="15" 
+                       oninput="updateMaxSpeed(this.value)">
+                <span id="maxSpeedValue">15</span>
+            </div>
+            <div class="setting-group">
+                <label for="starSizeSlider">Star Size:</label>
+                <input type="range" id="starSizeSlider" class="slider" min="20" max="100" value="50" 
+                       oninput="updateStarSize(this.value)">
+                <span id="starSizeValue">50</span>
+            </div>
+        </div>
+
+        <div class="info">
+            <p><strong>🚀 Experience hyperspace travel with interactive 3D stars!</strong></p>
+            <p><strong>Controls:</strong> Move mouse horizontally to control speed • Use buttons to modify appearance</p>
+            <p><strong>Features:</strong> Realistic 3D depth • Smooth motion trails • Dynamic color modes • Fullscreen support</p>
+            
+            <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <strong>⌨️ Keyboard Shortcuts:</strong>
+                <span style="display: block; font-size: 0.9rem; margin-top: 5px;">
+                    <kbd>T</kbd> Toggle trails • <kbd>C</kbd> Color mode • <kbd>R</kbd> Reset • <kbd>F</kbd> Fullscreen • <kbd>Space</kbd> Pause
+                </span>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span id="starCount" class="stat-value">500</span>
+                    <span class="stat-label">Stars</span>
+                </div>
+                <div class="stat">
+                    <span id="currentSpeed" class="stat-value">1.0</span>
+                    <span class="stat-label">Speed</span>
+                </div>
+                <div class="stat">
+                    <span id="frameRate" class="stat-value">60</span>
+                    <span class="stat-label">FPS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- StarField JavaScript -->
+    <script src="starfield.js"></script>
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Interactive Visual Apps Collection</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-bg: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            --tertiary-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            --accent-color: #00d4ff;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #f44336;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8b8;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-bg-dark: rgba(0, 0, 0, 0.2);
+            --border-radius: 15px;
+            --border-radius-sm: 8px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --box-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --glow-effect: 0 0 20px rgba(0, 212, 255, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: var(--glass-bg-dark);
+            box-shadow: var(--box-shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-logo:hover {
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--glass-bg);
+            color: var(--accent-color);
+            box-shadow: var(--glow-effect);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Home Section */
+        .home-section {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-content {
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .home-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .home-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .app-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .app-card:hover::before {
+            left: 100%;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow-lg);
+            border-color: var(--accent-color);
+        }
+
+        .app-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .app-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .app-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* App Sections */
+        .app-section {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+            background: var(--dark-bg);
+        }
+
+        .app-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .app-header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 100px;
+            left: 2rem;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            text-decoration: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: var(--accent-color);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: var(--glow-effect);
+        }
+
+        /* Canvas Containers */
+        .canvas-container {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            max-width: 900px;
+        }
+
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-color), #74b9ff, #fd79a8, var(--accent-color));
+            background-size: 400% 400%;
+            border-radius: var(--border-radius);
+            z-index: -1;
+            animation: borderGlow 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        /* Controls */
+        .controls-panel {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 900px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .control-group {
+            background: var(--glass-bg-dark);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+        }
+
+        .control-group h3 {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-item {
+            margin-bottom: 1rem;
+        }
+
+        .control-item label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .value-display {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: var(--glow-effect);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .control-button {
+            background: linear-gradient(135deg, var(--accent-color), #66BB6A);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-effect);
+        }
+
+        .control-button:active {
+            transform: translateY(0);
+        }
+
+        .control-button.active {
+            background: linear-gradient(135deg, var(--warning-color), #FFB74D);
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.4);
+        }
+
+        /* Animations */
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--glass-bg-dark);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 2rem;
+                transition: var(--transition);
+                gap: 1rem;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .nav-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            .home-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-button {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+
+            .app-section {
+                padding: 1rem;
+            }
+
+            .canvas-container, .controls-panel {
+                margin: 1rem 0;
+                padding: 1rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 212, 255, 0.2);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Floating elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(116, 185, 255, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">🎨 Visual Apps</a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link active" onclick="showSection('home')">Home</a></li>
+                <li><a href="#starfield" class="nav-link" onclick="showSection('starfield')">✨ StarField</a></li>
+                <li><a href="#hacktheme" class="nav-link" onclick="showSection('hacktheme')">🔰 Matrix</a></li>
+                <li><a href="#twinklestars" class="nav-link" onclick="showSection('twinklestars')">🌟 TwinkleStars</a></li>
+                <li><a href="#fallinglines" class="nav-link" onclick="showSection('fallinglines')">📈 Falling Lines</a></li>
+            </ul>
+            <div class="nav-toggle" id="nav-toggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Home Section -->
+        <section id="home" class="home-section">
+            <div class="floating-shapes">
+                <div class="floating-shape"></div>
+                <div class="floating-shape"></div>
+                <div class="floating-shape"></div>
+            </div>
+            <div class="home-content">
+                <h1 class="home-title">Interactive Visual Apps</h1>
+                <p class="home-subtitle">
+                    A collection of mesmerizing visual experiences converted from Processing to modern HTML5/JavaScript. 
+                    Explore beautiful animations, interactive simulations, and creative coding masterpieces.
+                </p>
+                <div class="home-grid">
+                    <div class="app-card" onclick="showSection('starfield')">
+                        <span class="app-icon">✨</span>
+                        <h3 class="app-title">StarField</h3>
+                        <p class="app-description">3D hyperspace travel simulation with dynamic stars, trails, and color modes</p>
+                    </div>
+                    <div class="app-card" onclick="showSection('hacktheme')">
+                        <span class="app-icon">🔰</span>
+                        <h3 class="app-title">Matrix Theme</h3>
+                        <p class="app-description">Digital rain effect inspired by The Matrix with customizable characters and speed</p>
+                    </div>
+                    <div class="app-card" onclick="showSection('twinklestars')">
+                        <span class="app-icon">🌟</span>
+                        <h3 class="app-title">TwinkleStars</h3>
+                        <p class="app-description">Interactive particle art generator with multiple visual modes and mouse painting</p>
+                    </div>
+                    <div class="app-card" onclick="showSection('fallinglines')">
+                        <span class="app-icon">📈</span>
+                        <h3 class="app-title">Falling Lines</h3>
+                        <p class="app-description">Physics-based animation with bouncing lines, trails, and customizable gravity</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- StarField Section -->
+        <section id="starfield" class="app-section">
+            <button class="back-button" onclick="showSection('home')">← Back to Home</button>
+            <div class="app-header">
+                <h1>✨ StarField Simulation</h1>
+                <p>Experience hyperspace travel with interactive 3D stars and dynamic visual effects</p>
+            </div>
+            <div class="canvas-container">
+                <div id="starfield-canvas"></div>
+            </div>
+            <div class="controls-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>🎮 Animation</h3>
+                        <div class="button-group">
+                            <button class="control-button" onclick="starFieldControls.togglePause()">Pause/Play</button>
+                            <button class="control-button" onclick="starFieldControls.toggleTrails()">Toggle Trails</button>
+                            <button class="control-button" onclick="starFieldControls.setColorMode('rainbow')">Color Mode</button>
+                            <button class="control-button" onclick="starFieldControls.reset()">Reset</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>⚙️ Settings</h3>
+                        <div class="control-item">
+                            <label>Star Count <span class="value-display" id="sf-count">500</span></label>
+                            <input type="range" class="slider" min="100" max="1000" value="500" 
+                                   oninput="starFieldControls.updateStarCount(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Speed <span class="value-display" id="sf-speed">5</span></label>
+                            <input type="range" class="slider" min="1" max="20" value="5" 
+                                   oninput="starFieldControls.updateSpeed(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Star Size <span class="value-display" id="sf-size">50</span></label>
+                            <input type="range" class="slider" min="10" max="100" value="50" 
+                                   oninput="starFieldControls.updateStarSize(this.value)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matrix Theme Section -->
+        <section id="hacktheme" class="app-section">
+            <button class="back-button" onclick="showSection('home')">← Back to Home</button>
+            <div class="app-header">
+                <h1>🔰 Matrix Digital Rain</h1>
+                <p>Experience the iconic Matrix digital rain effect with customizable parameters</p>
+            </div>
+            <div class="canvas-container">
+                <div id="matrix-canvas"></div>
+            </div>
+            <div class="controls-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>🎮 Animation</h3>
+                        <div class="button-group">
+                            <button class="control-button" onclick="matrixControls.reset()">Reset</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>⚙️ Settings</h3>
+                        <div class="control-item">
+                            <label>Fade Speed <span class="value-display" id="mx-speed">3</span></label>
+                            <input type="range" class="slider" min="1" max="20" value="3" 
+                                   oninput="matrixControls.updateSpeed(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Stream Count <span class="value-display" id="mx-density">50</span></label>
+                            <input type="range" class="slider" min="20" max="100" value="50" 
+                                   oninput="matrixControls.updateDensity(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Font Size <span class="value-display" id="mx-fontsize">14</span></label>
+                            <input type="range" class="slider" min="10" max="24" value="14" 
+                                   oninput="matrixControls.updateFontSize(this.value)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TwinkleStars Section -->
+        <section id="twinklestars" class="app-section">
+            <button class="back-button" onclick="showSection('home')">← Back to Home</button>
+            <div class="app-header">
+                <h1>🌟 TwinkleStars Art Generator</h1>
+                <p>Create beautiful interactive particle art with multiple modes and mouse painting</p>
+            </div>
+            <div class="canvas-container">
+                <div id="twinklestars-canvas"></div>
+            </div>
+            <div class="controls-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>🎨 Modes</h3>
+                        <div class="button-group">
+                            <button class="control-button" onclick="twinkleControls.setMode(1)">⭐ Stars</button>
+                            <button class="control-button" onclick="twinkleControls.setMode(2)">🔵 Balls</button>
+                            <button class="control-button" onclick="twinkleControls.setMode(3)">⬜ Boxes</button>
+                            <button class="control-button" onclick="twinkleControls.setMode(4)">🌈 Rainbow</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>⚙️ Settings</h3>
+                        <div class="control-item">
+                            <label>Speed <span class="value-display" id="ts-speed">30</span></label>
+                            <input type="range" class="slider" min="1" max="60" value="30" 
+                                   oninput="twinkleControls.updateSpeed(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Size <span class="value-display" id="ts-size">15</span></label>
+                            <input type="range" class="slider" min="5" max="50" value="15" 
+                                   oninput="twinkleControls.updateSize(this.value)">
+                        </div>
+                        <div class="button-group">
+                            <button class="control-button" onclick="twinkleControls.toggleTrails()">Trail Mode</button>
+                            <button class="control-button" onclick="twinkleControls.clear()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Falling Lines Section -->
+        <section id="fallinglines" class="app-section">
+            <button class="back-button" onclick="showSection('home')">← Back to Home</button>
+            <div class="app-header">
+                <h1>📈 Falling Lines Animation</h1>
+                <p>Watch mesmerizing lines fall and bounce with realistic physics simulation</p>
+            </div>
+            <div class="canvas-container">
+                <div id="fallinglines-canvas"></div>
+            </div>
+            <div class="controls-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>🎮 Animation</h3>
+                        <div class="button-group">
+                            <button class="control-button" onclick="linesControls.togglePause()">Pause/Play</button>
+                            <button class="control-button" onclick="linesControls.reset()">Reset</button>
+                            <button class="control-button" onclick="linesControls.toggleTrails()">Trails</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>⚡ Physics</h3>
+                        <div class="control-item">
+                            <label>Speed <span class="value-display" id="fl-speed">1.0</span></label>
+                            <input type="range" class="slider" min="0.1" max="5.0" step="0.1" value="1.0" 
+                                   oninput="linesControls.updateSpeed(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Gravity <span class="value-display" id="fl-gravity">1.0</span></label>
+                            <input type="range" class="slider" min="0.5" max="3.0" step="0.1" value="1.0" 
+                                   oninput="linesControls.updateGravity(this.value)">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>🎨 Visual</h3>
+                        <div class="control-item">
+                            <label>Thickness <span class="value-display" id="fl-thickness">2</span></label>
+                            <input type="range" class="slider" min="1" max="10" step="1" value="2" 
+                                   oninput="linesControls.updateThickness(this.value)">
+                        </div>
+                        <div class="control-item">
+                            <label>Density <span class="value-display" id="fl-density">4</span></label>
+                            <input type="range" class="slider" min="2" max="15" step="1" value="4" 
+                                   oninput="linesControls.updateDensity(this.value)">
+                        </div>
+                        <div class="button-group">
+                            <button class="control-button" onclick="linesControls.cycleColorMode()">Color Mode</button>
+                            <button class="control-button" onclick="linesControls.cycleBgColor()">Background</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h3>📊 Stats</h3>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="fl-fps">60</span>
+                                <span class="stat-label">FPS</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="fl-lines">30</span>
+                                <span class="stat-label">Lines</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="unified-apps.js"></script>
+</body>
+</html>

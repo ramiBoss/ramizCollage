@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Ping Pong Championship</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <style>
+  :root {
+    --primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --court-bg: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+    --paddle-color: #ff6b6b;
+    --ball-color: #ffeaa7;
+    --text-color: #ffffff;
+    --accent-color: #00cec9;
+    --glow-color: rgba(0, 206, 201, 0.6);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--primary-bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #gameContainer {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .game-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .game-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, var(--accent-color), #74b9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px var(--glow-color);
+  }
+
+  .game-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+
+  #scoreBoard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .player-score {
+    text-align: center;
+    flex: 1;
+  }
+
+  .player-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  .score-display {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px var(--glow-color);
+    text-align: center;
+  }
+
+  .vs-separator {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 20px;
+  }
+
+  #playground {
+    background: var(--court-bg);
+    width: 800px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid var(--accent-color);
+    box-shadow: 
+      inset 0 0 50px rgba(0, 206, 201, 0.1),
+      0 0 30px var(--glow-color);
+  }
+
+  /* Court lines */
+  #playground::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-50%);
+  }
+
+  #playground::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #ball {
+    background: radial-gradient(circle at 30% 30%, var(--ball-color), #fdcb6e);
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: 
+      0 0 20px var(--ball-color),
+      inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.1s ease;
+  }
+
+  .paddle {
+    background: linear-gradient(180deg, var(--paddle-color), #e84393);
+    position: absolute;
+    width: 15px;
+    height: 80px;
+    border-radius: 7px;
+    box-shadow: 
+      0 0 15px rgba(255, 107, 107, 0.6),
+      inset 2px 0 4px rgba(255, 255, 255, 0.2);
+    transition: all 0.1s ease;
+  }
+
+  #paddleA {
+    left: 30px;
+    top: 160px;
+  }
+
+  #paddleB {
+    right: 30px;
+    top: 160px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .control-group {
+    text-align: center;
+  }
+
+  .control-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--accent-color);
+  }
+
+  .game-status {
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-weight: 600;
+  }
+
+  /* Animations */
+  @keyframes ballGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px var(--ball-color), inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 30px var(--ball-color), inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  #ball {
+    animation: ballGlow 1s ease-in-out infinite;
+  }
+
+  .paddle:hover {
+    transform: scale(1.05);
+  }
+
+  /* Responsive design */
+  @media (max-width: 900px) {
+    #playground {
+      width: 600px;
+      height: 300px;
+    }
+    
+    .game-title {
+      font-size: 2rem;
+    }
+    
+    #gameContainer {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    #playground {
+      width: 90vw;
+      height: 45vw;
+      max-width: 500px;
+      max-height: 250px;
+    }
+    
+    .game-title {
+      font-size: 1.5rem;
+    }
+    
+    .score-display {
+      font-size: 2rem;
+    }
+    
+    .controls {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <div class="game-header">
+      <h1 class="game-title">🏓 PING PONG CHAMPIONSHIP</h1>
+      <p class="game-subtitle">The Ultimate Table Tennis Experience</p>
+    </div>
+
+    <div id="scoreBoard">
+      <div class="player-score">
+        <div class="player-name">Player 1</div>
+        <div id="scoreA" class="score-display">0</div>
+      </div>
+      <div class="vs-separator">VS</div>
+      <div class="player-score">
+        <div class="player-name">Player 2</div>
+        <div id="scoreB" class="score-display">0</div>
+      </div>
+    </div>
+
+    <div id="playground">
+      <div id="paddleA" class="paddle"></div>
+      <div id="paddleB" class="paddle"></div>
+      <div id="ball"></div>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-title">Player 1</div>
+        <div>W - Move Up</div>
+        <div>S - Move Down</div>
+      </div>
+      <div class="control-group">
+        <div class="control-title">Player 2</div>
+        <div>↑ - Move Up</div>
+        <div>↓ - Move Down</div>
+      </div>
+    </div>
+
+    <div class="game-status" id="gameStatus">
+      Game Ready - First to 10 points wins!
+    </div>
+  </div>
